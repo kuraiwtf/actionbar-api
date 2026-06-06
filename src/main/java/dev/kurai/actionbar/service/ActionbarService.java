@@ -40,6 +40,17 @@ public sealed interface ActionbarService permits ActionbarServiceImpl {
     return create(plugin, audienceProvider, ActionbarStyle.DEFAULT);
   }
 
+  /**
+   * Creates a new {@code ActionbarService} with a custom {@link ActionbarStyle} and starts the
+   * asynchronous tick loop.
+   *
+   * @param plugin the owning plugin used to schedule the task
+   * @param audienceProvider a function that maps a {@link Player} to the {@link Audience} that
+   *     receives action-bar packets
+   * @param style the visual style applied when rendering entries
+   * @return a running {@code ActionbarService} instance
+   */
+  @Contract(value = "_, _, _ -> new", pure = true)
   static ActionbarService create(
       final Plugin plugin,
       final Function<Player, Audience> audienceProvider,
@@ -56,5 +67,10 @@ public sealed interface ActionbarService permits ActionbarServiceImpl {
    */
   Actionbar actionbar(final UUID holder);
 
+  /**
+   * Returns the {@link ActionbarStyle} used when rendering entries for all players.
+   *
+   * @return the active style; never {@code null}
+   */
   ActionbarStyle style();
 }
