@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Contract;
  * at any time.
  *
  * <p>Use {@link #create()} to obtain a new instance, or retrieve a player-scoped one through {@link
- * dev.kurai.actionbar.service.ActionbarService#actionbar(java.util.UUID)}.
+ * ActionbarService#actionbar(java.util.UUID)}.
  */
 public sealed interface Actionbar permits ActionbarImpl {
 
