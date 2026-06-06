@@ -1,6 +1,7 @@
 package dev.kurai.actionbar.style;
 
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -34,14 +35,11 @@ public final class ActionbarStyle {
   public static final ActionbarStyle DEFAULT = ActionbarStyle.builder().build();
 
   /** Component placed before the first entry. Defaults to {@code »} in dark gray. */
-  @lombok.Builder.Default
-  private final Component prefix = Component.text('»', NamedTextColor.DARK_GRAY);
+  @Default private final Component prefix = Component.text('»', NamedTextColor.DARK_GRAY);
 
   /** Component placed between consecutive entries. Defaults to {@code ❘} in dark gray. */
-  @lombok.Builder.Default
-  private final Component separator = Component.text('❘', NamedTextColor.DARK_GRAY);
+  @Default private final Component separator = Component.text('❘', NamedTextColor.DARK_GRAY);
 
   /** Component placed after the last entry. Defaults to {@code «} in dark gray. */
-  @lombok.Builder.Default
-  private final Component suffix = Component.text('«', NamedTextColor.DARK_GRAY);
+  @Default private final Component suffix = Component.text('«', NamedTextColor.DARK_GRAY);
 }
