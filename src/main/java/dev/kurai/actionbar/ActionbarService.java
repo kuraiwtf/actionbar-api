@@ -46,15 +46,15 @@ public sealed interface ActionbarService permits ActionbarServiceImpl {
    * @param plugin the owning plugin used to schedule the task
    * @param audienceProvider a function that maps a {@link Player} to the {@link Audience} that
    *     receives action-bar packets
-   * @param style the visual actionbarStyle applied when rendering entries
+   * @param actionbarStyle the visual actionbarStyle applied when rendering entries
    * @return a running {@code ActionbarService} instance
    */
   @Contract(value = "_, _, _ -> new", pure = true)
   static ActionbarService actionbarService(
       final Plugin plugin,
       final Function<Player, Audience> audienceProvider,
-      final ActionbarStyle style) {
-    return new ActionbarServiceImpl(plugin, audienceProvider, style);
+      final ActionbarStyle actionbarStyle) {
+    return new ActionbarServiceImpl(plugin, audienceProvider, actionbarStyle);
   }
 
   /**
