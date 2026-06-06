@@ -1,4 +1,4 @@
 @NullMarked
-package dev.kurai.actionbar.service;
+package dev.kurai.actionbar.style;
 
 import org.jspecify.annotations.NullMarked;

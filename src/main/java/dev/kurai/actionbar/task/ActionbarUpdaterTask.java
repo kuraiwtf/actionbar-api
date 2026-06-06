@@ -1,16 +1,16 @@
 package dev.kurai.actionbar.task;
 
-import static net.kyori.adventure.text.Component.text;
+import static java.util.Objects.requireNonNull;
 
 import com.google.common.collect.Lists;
 import dev.kurai.actionbar.Actionbar;
+import dev.kurai.actionbar.ActionbarService;
 import dev.kurai.actionbar.entry.ActionbarEntry;
-import dev.kurai.actionbar.service.ActionbarService;
 import dev.kurai.actionbar.style.ActionbarStyle;
 import java.util.Comparator;
 import java.util.function.Function;
-import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -24,45 +24,51 @@ import org.bukkit.entity.Player;
  *   <li>Evicts expired {@link dev.kurai.actionbar.entry.ActionbarEntry entries} from each player's
  *       {@link Actionbar}.
  *   <li>Sorts remaining entries by their {@link net.kyori.adventure.key.Key}.
- *   <li>Composes a single {@link net.kyori.adventure.text.Component} using the service's
- *       {@link ActionbarStyle} (prefix, separators, suffix) and sends it via the configured
- *       audience provider.
+ *   <li>Composes a single {@link net.kyori.adventure.text.Component} using the service's {@link
+ *       ActionbarStyle} (prefix, separators, suffix) and sends it via the configured audience
+ *       provider.
  * </ol>
  *
  * <p>Players with no entries are skipped — no packet is sent.
  */
-@RequiredArgsConstructor
 public final class ActionbarUpdaterTask implements Runnable {
 
-  private final ActionbarService service;
+  private final ActionbarService actionbarService;
   private final Function<Player, Audience> audienceProvider;
+
+  public ActionbarUpdaterTask(
+      final ActionbarService actionbarService, final Function<Player, Audience> audienceProvider) {
+    this.actionbarService = requireNonNull(actionbarService, "Actionbar service cannot be null");
+    this.audienceProvider = requireNonNull(audienceProvider, "Audience provider cannot be null");
+  }
 
   @Override
   public void run() {
-    final ActionbarStyle style = this.service.style();
+    final ActionbarStyle actionbarStyle = this.actionbarService.actionbarStyle();
     for (final Player player : Bukkit.getOnlinePlayers()) {
-      final Actionbar actionbar = this.service.actionbar(player.getUniqueId());
-      actionbar.unregisterEntriesIf(ActionbarEntry::expired);
+      final Actionbar actionbar = this.actionbarService.actionbar(player.getUniqueId());
+      actionbar.unregisterActionbarEntriesIf(ActionbarEntry::expired);
 
-      final var entries = Lists.newArrayList(actionbar.entries());
-      if (entries.isEmpty()) {
+      final var actionbarEntries = Lists.newArrayList(actionbar.actionbarEntries());
+      if (actionbarEntries.isEmpty()) {
         continue;
       }
 
-      final TextComponent.Builder component = text().append(style.prefix()).appendSpace();
-      entries.sort(Comparator.comparing(ActionbarEntry::key));
+      final TextComponent.Builder component =
+          Component.text().append(actionbarStyle.prefixComponent()).appendSpace();
+      actionbarEntries.sort(Comparator.comparing(ActionbarEntry::key));
 
-      for (final ActionbarEntry entry : entries) {
-        component.append(entry.value());
+      for (final ActionbarEntry actionbarEntry : actionbarEntries) {
+        component.append(actionbarEntry.valueComponent());
 
-        if (!entry.key().equals(entries.getLast().key())) {
-          component.appendSpace().append(style.separator()).appendSpace();
+        if (!actionbarEntry.key().equals(actionbarEntries.getLast().key())) {
+          component.appendSpace().append(actionbarStyle.separatorComponent()).appendSpace();
         }
       }
 
       this.audienceProvider
           .apply(player)
-          .sendActionBar(component.appendSpace().append(style.suffix()));
+          .sendActionBar(component.appendSpace().append(actionbarStyle.suffixComponent()));
     }
   }
 }

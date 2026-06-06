@@ -19,41 +19,41 @@ final class ActionbarImpl implements Actionbar {
 
   private static final String KEY_CANNOT_BE_NULL = "Key cannot be null";
 
-  private final Map<Key, ActionbarEntry> entries = Maps.newConcurrentMap();
-  private final Collection<ActionbarEntry> entriesView =
-      Collections.unmodifiableCollection(this.entries.values());
+  private final Map<Key, ActionbarEntry> actionbarEntries = Maps.newConcurrentMap();
+  private final Collection<ActionbarEntry> actionbarEntriesView =
+      Collections.unmodifiableCollection(this.actionbarEntries.values());
 
   /** {@inheritDoc} */
   @Override
   @UnmodifiableView
-  public Collection<ActionbarEntry> entries() {
-    return this.entriesView;
+  public Collection<ActionbarEntry> actionbarEntries() {
+    return this.actionbarEntriesView;
   }
 
   /** {@inheritDoc} */
   @Override
-  public void registerEntry(final ActionbarEntry entry) {
-    requireNonNull(entry, "Actionbar entry cannot be null");
+  public void registerActionbarEntry(final ActionbarEntry actionbarEntry) {
+    requireNonNull(actionbarEntry, "Actionbar entry cannot be null");
 
-    this.entries.put(entry.key(), entry);
+    this.actionbarEntries.put(actionbarEntry.key(), actionbarEntry);
   }
 
   /** {@inheritDoc} */
   @Override
-  public void unregisterEntry(final Key key) {
-    this.entries.remove(requireNonNull(key, KEY_CANNOT_BE_NULL));
+  public void unregisterActionbarEntry(final Key key) {
+    this.actionbarEntries.remove(requireNonNull(key, KEY_CANNOT_BE_NULL));
   }
 
   @Override
-  public void unregisterEntriesIf(final Predicate<ActionbarEntry> actionbarEntryFilter) {
-    this.entries
+  public void unregisterActionbarEntriesIf(final Predicate<ActionbarEntry> actionbarEntryFilter) {
+    this.actionbarEntries
         .values()
         .removeIf(requireNonNull(actionbarEntryFilter, "Actionbar entry filter cannot be null"));
   }
 
   /** {@inheritDoc} */
   @Override
-  public ActionbarEntry entry(final Key key) {
-    return this.entries.get(requireNonNull(key, KEY_CANNOT_BE_NULL));
+  public ActionbarEntry actionbarEntry(final Key key) {
+    return this.actionbarEntries.get(requireNonNull(key, KEY_CANNOT_BE_NULL));
   }
 }
