@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Contract;
  * bar. Entries are keyed by an Adventure {@link Key} so they can be individually updated or removed
  * at any time.
  *
- * <p>Use {@link #create()} to obtain a new instance, or retrieve a player-scoped one through {@link
+ * <p>Use {@link #actionbar()} to get a new instance, or retrieve a player-scoped one through {@link
  * ActionbarService#actionbar(java.util.UUID)}.
  */
 public sealed interface Actionbar permits ActionbarImpl {
@@ -24,7 +24,7 @@ public sealed interface Actionbar permits ActionbarImpl {
    * @return a fresh {@code Actionbar} instance
    */
   @Contract(value = " -> new", pure = true)
-  static Actionbar create() {
+  static Actionbar actionbar() {
     return new ActionbarImpl();
   }
 
@@ -33,50 +33,51 @@ public sealed interface Actionbar permits ActionbarImpl {
    *
    * @return a live, mutable view of the entries
    */
-  Collection<ActionbarEntry> entries();
+  Collection<ActionbarEntry> actionbarEntries();
 
   /**
    * Registers a persistent entry (no expiry) with the given key and text component.
    *
    * @param key the unique identifier for this entry
-   * @param value the text component to display
+   * @param valueComponent the text component to display
    */
-  default void registerEntry(final Key key, final Component value) {
-    this.registerEntry(new ActionbarEntry(key, value));
+  default void registerActionbarEntry(final Key key, final Component valueComponent) {
+    this.registerActionbarEntry(new ActionbarEntry(key, valueComponent));
   }
 
   /**
    * Registers a time-limited entry that expires after {@code duration} has elapsed.
    *
    * @param key the unique identifier for this entry
-   * @param value the text component to display
+   * @param valueComponent the text component to display
    * @param duration how long the entry should remain visible; must be positive
    */
-  default void registerEntry(final Key key, final Component value, final Duration duration) {
-    this.registerEntry(new ActionbarEntry(key, value, duration));
+  default void registerActionbarEntry(
+      final Key key, final Component valueComponent, final Duration duration) {
+    this.registerActionbarEntry(new ActionbarEntry(key, valueComponent, duration));
   }
 
   /**
    * Registers a pre-built {@link ActionbarEntry}. If an entry with the same key already exists it
    * is replaced.
    *
-   * @param entry the entry to register; must not be {@code null}
+   * @param actionbarEntry the entry to register; must not be {@code null}
    */
-  void registerEntry(final ActionbarEntry entry);
+  void registerActionbarEntry(final ActionbarEntry actionbarEntry);
 
   /**
    * Removes the entry identified by {@code key}, if present.
    *
    * @param key the key of the entry to remove
    */
-  void unregisterEntry(final Key key);
+  void unregisterActionbarEntry(final Key key);
 
   /**
    * Removes the entries matching the given filter.
    *
    * @param actionbarEntryFilter the filter to apply; must not be {@code null}
    */
-  void unregisterEntriesIf(final Predicate<ActionbarEntry> actionbarEntryFilter);
+  void unregisterActionbarEntriesIf(final Predicate<ActionbarEntry> actionbarEntryFilter);
 
   /**
    * Returns the entry associated with {@code key}, or {@code null} if none is registered.
@@ -84,5 +85,5 @@ public sealed interface Actionbar permits ActionbarImpl {
    * @param key the key to look up
    * @return the matching entry, or {@code null}
    */
-  ActionbarEntry entry(final Key key);
+  ActionbarEntry actionbarEntry(final Key key);
 }

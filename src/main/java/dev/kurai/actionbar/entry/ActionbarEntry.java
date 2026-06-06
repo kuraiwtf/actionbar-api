@@ -27,7 +27,7 @@ public final class ActionbarEntry implements Keyed {
   private final Key key;
 
   /** Text component rendered in the action bar for this entry. */
-  private final Component value;
+  private final Component valueComponent;
 
   /** How long this entry lives. {@link Duration#ZERO} means the entry never expires. */
   private final Duration duration;
@@ -39,22 +39,22 @@ public final class ActionbarEntry implements Keyed {
    * Creates a persistent entry that never expires.
    *
    * @param key the unique identifier for this entry
-   * @param value the text component to display
+   * @param valueComponent the text component to display
    */
-  public ActionbarEntry(final Key key, final Component value) {
-    this(key, value, Duration.ZERO);
+  public ActionbarEntry(final Key key, final Component valueComponent) {
+    this(key, valueComponent, Duration.ZERO);
   }
 
   /**
    * Creates a time-limited entry that expires after {@code duration} has elapsed.
    *
    * @param key the unique identifier for this entry
-   * @param value the text component to display
+   * @param valueComponent the text component to display
    * @param duration the lifetime of this entry; use {@link Duration#ZERO} for no expiry
    */
-  public ActionbarEntry(final Key key, final Component value, final Duration duration) {
+  public ActionbarEntry(final Key key, final Component valueComponent, final Duration duration) {
     this.key = requireNonNull(key, "Key cannot be null");
-    this.value = requireNonNull(value, "Value component cannot be null");
+    this.valueComponent = requireNonNull(valueComponent, "Value component cannot be null");
 
     this.duration = requireNonNull(duration, "Duration cannot be null");
 

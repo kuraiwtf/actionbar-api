@@ -16,12 +16,12 @@ import org.bukkit.plugin.Plugin;
 
 /**
  * Default {@link ActionbarService} implementation that stores per-player {@link Actionbar}
- * instances in a {@link java.util.HashMap} and schedules {@link ActionbarUpdaterTask} to run
- * asynchronously every tick (period = 1).
+ * instances in a {@link java.util.concurrent.ConcurrentHashMap} and schedules {@link
+ * ActionbarUpdaterTask} to run asynchronously every tick (period = 1).
  */
 final class ActionbarServiceImpl implements ActionbarService {
 
-  @Getter private final ActionbarStyle style;
+  @Getter private final ActionbarStyle actionbarStyle;
 
   /** Stores each online player's actionbar, keyed by their unique ID. */
   private final Map<UUID, Actionbar> actionbars;
@@ -31,15 +31,16 @@ final class ActionbarServiceImpl implements ActionbarService {
    *
    * @param plugin the plugin that owns the scheduled task
    * @param audienceProvider maps a {@link Player} to the target {@link Audience}
+   * @param actionbarStyle the visual style to use when rendering entries
    */
   public ActionbarServiceImpl(
       final Plugin plugin,
       final Function<Player, Audience> audienceProvider,
-      final ActionbarStyle style) {
+      final ActionbarStyle actionbarStyle) {
     requireNonNull(plugin, "Plugin cannot be null");
     requireNonNull(audienceProvider, "Audience provider cannot be null");
 
-    this.style = requireNonNull(style, "Style cannot be null");
+    this.actionbarStyle = requireNonNull(actionbarStyle, "Style cannot be null");
 
     this.actionbars = Maps.newConcurrentMap();
 
@@ -56,6 +57,6 @@ final class ActionbarServiceImpl implements ActionbarService {
   @Override
   public Actionbar actionbar(final UUID holder) {
     return this.actionbars.computeIfAbsent(
-        requireNonNull(holder, "Holder ID cannot be null"), _ -> Actionbar.create());
+        requireNonNull(holder, "Holder ID cannot be null"), _ -> Actionbar.actionbar());
   }
 }
