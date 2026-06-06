@@ -40,7 +40,7 @@ final class ActionbarServiceImpl implements ActionbarService {
     requireNonNull(plugin, "Plugin cannot be null");
     requireNonNull(audienceProvider, "Audience provider cannot be null");
 
-    this.actionbarStyle = requireNonNull(actionbarStyle, "Style cannot be null");
+    this.actionbarStyle = requireNonNull(actionbarStyle, "Actionbar style cannot be null");
 
     this.actionbars = Maps.newConcurrentMap();
 
