@@ -12,15 +12,15 @@ import org.jetbrains.annotations.Contract;
  * Manages per-player {@link Actionbar} instances and drives the recurring update cycle that sends
  * action-bar packets to online players.
  *
- * <p>Obtain an instance via {@link #actionbarService(Plugin, Function)}. The returned service
+ * <p>Get an instance via {@link #actionbarService(Plugin, Function)}. The returned service
  * immediately schedules an asynchronous repeating task that refreshes every player's action bar
  * each tick.
  *
  * <p>Example usage:
  *
  * <pre>{@code
- * ActionbarService service = ActionbarService.create(plugin, player -> BukkitAudiences.of(plugin).player(player));
- * service.actionbar(player.getUniqueId()).registerEntry(Key.key("myplugin", "health"), healthComponent);
+ * ActionbarService actionbarService = ActionbarService.actionbarService(plugin, player -> BukkitAudiences.of(plugin).player(player));
+ * actionbarService.actionbar(player.getUniqueId()).registerActionbarEntry(Key.key("myplugin", "health"), healthComponent);
  * }</pre>
  */
 public sealed interface ActionbarService permits ActionbarServiceImpl {
