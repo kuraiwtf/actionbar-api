@@ -58,6 +58,13 @@ public sealed interface ActionbarService permits ActionbarServiceImpl {
   }
 
   /**
+   * Returns the {@link ActionbarStyle} used when rendering entries for all players.
+   *
+   * @return the active actionbarStyle; never {@code null}
+   */
+  ActionbarStyle actionbarStyle();
+
+  /**
    * Returns the {@link Actionbar} associated with {@code holder}, creating one lazily if none
    * exists yet.
    *
@@ -65,11 +72,4 @@ public sealed interface ActionbarService permits ActionbarServiceImpl {
    * @return the player's action bar; never {@code null}
    */
   Actionbar actionbar(final UUID holder);
-
-  /**
-   * Returns the {@link ActionbarStyle} used when rendering entries for all players.
-   *
-   * @return the active actionbarStyle; never {@code null}
-   */
-  ActionbarStyle actionbarStyle();
 }
