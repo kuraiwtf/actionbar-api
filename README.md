@@ -72,7 +72,7 @@ Actionbar actionbar = actionbarService.actionbar(player.getUniqueId());
 actionbar.registerActionbarEntry(Key.key("myplugin", "health"), Component.text("❤ 20", NamedTextColor.RED));
 
 // Timed entry (auto-expires after 5 seconds)
-actionbar.registerActionbarEntry(Key.key("myplugin", "notification"), Component.text("Quest completed!", NamedTextColor.GREEN), Duration.ofSeconds(5));
+        actionbar.registerActionbarEntry(Key.key("myplugin", "notification"), Component.text("Quest completed!", NamedTextColor.GREEN), Duration.ofSeconds(5));
 ```
 
 ### 3. Remove entries
@@ -117,12 +117,12 @@ For example, with the custom configuration shown above:
 
 ### `ActionbarEntry`
 
-| Field            | Description                                            |
+| Member           | Description                                            |
 | ---------------- | ------------------------------------------------------ |
-| `key`            | Adventure `Key` uniquely identifying this entry        |
-| `valueComponent` | Adventure `Component` to display                       |
-| `duration`       | How long the entry lives (`Duration.ZERO` = permanent) |
-| `creationTime`   | When the entry was created                             |
+| `key()`          | Adventure `Key` uniquely identifying this entry        |
+| `asComponent()`  | Adventure `Component` to display                       |
+| `duration()`     | How long the entry lives (`Duration.ZERO` = permanent) |
+| `creationTime()` | When the entry was created                             |
 | `expired()`      | Returns `true` if the entry has outlived its duration  |
 
 ### `JoinConfiguration`
