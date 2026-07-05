@@ -44,16 +44,11 @@ public final class ActionbarUpdaterTask implements Runnable {
       actionbar.unregisterActionbarEntriesIf(ActionbarEntry::expired);
 
       final var actionbarEntries = actionbar.actionbarEntries();
-      if (actionbarEntries.isEmpty()) {
-        continue;
+      if (!actionbarEntries.isEmpty()) {
+        this.audienceProvider
+            .apply(player)
+            .sendActionBar(Component.join(joinConfiguration, actionbarEntries));
       }
-
-      this.audienceProvider
-          .apply(player)
-          .sendActionBar(
-              Component.join(
-                  joinConfiguration,
-                  actionbarEntries.stream().map(ActionbarEntry::valueComponent).toList()));
     }
   }
 }
