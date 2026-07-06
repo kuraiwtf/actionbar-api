@@ -40,7 +40,7 @@ final class ActionbarEntryImpl implements ActionbarEntry {
     }
 
     this.creationTime = now();
-    this.expirationTime = duration.isZero() ? null : this.creationTime.plus(duration);
+    this.expirationTime = this.duration.isZero() ? null : this.creationTime.plus(this.duration);
   }
 
   /** {@inheritDoc} */
