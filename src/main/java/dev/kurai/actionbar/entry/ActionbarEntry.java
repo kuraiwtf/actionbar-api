@@ -1,73 +1,67 @@
 package dev.kurai.actionbar.entry;
 
-import static java.time.Instant.now;
-import static java.util.Objects.requireNonNull;
-
 import java.time.Duration;
 import java.time.Instant;
-import lombok.Getter;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
+import org.jetbrains.annotations.Contract;
 
 /**
- * An immutable entry in an action bar, consisting of a unique {@link Key}, a display {@link
- * Component}, and an optional lifetime {@link Duration}.
+ * An immutable entry in an action bar, consisting of an identifying {@link Key}, a display {@link
+ * Component}, and a lifetime {@link Duration}.
  *
- * <p>Entries created without a duration (or with {@link Duration#ZERO}) never expire. Entries
- * created with a positive duration expire once {@code creationTime + duration} is in the past, as
- * determined by {@link #expired()}.
- *
- * <p>All fields are exposed via Lombok's {@code @Getter}.
+ * <p>Entries created without a duration or with {@link Duration#ZERO} never expire. Entries created
+ * with a positive duration expire once their lifetime has elapsed, as determined by {@link
+ * #expired()}.
  */
-@Getter
-public final class ActionbarEntry implements Keyed {
+public sealed interface ActionbarEntry extends Keyed, ComponentLike permits ActionbarEntryImpl {
 
-  /** Unique identifier used to register, look up, and sort this entry. */
-  private final Key key;
-
-  /** Text component rendered in the action bar for this entry. */
-  private final Component valueComponent;
-
-  /** How long this entry lives. {@link Duration#ZERO} means the entry never expires. */
-  private final Duration duration;
-
-  /** The wall-clock time at which this entry was constructed. */
-  private final Instant creationTime;
+  /**
+   * Creates an entry with the specified lifetime.
+   *
+   * @param key the identifier for this entry
+   * @param component the component to display
+   * @param duration the lifetime of this entry; use {@link Duration#ZERO} for no expiry
+   * @return a new action-bar entry
+   */
+  @Contract(value = "_, _, _ -> new", pure = true)
+  static ActionbarEntry actionbarEntry(
+      final Key key, final Component component, final Duration duration) {
+    return new ActionbarEntryImpl(key, component, duration);
+  }
 
   /**
    * Creates a persistent entry that never expires.
    *
-   * @param key the unique identifier for this entry
-   * @param valueComponent the text component to display
+   * @param key the identifier for this entry
+   * @param component the component to display
+   * @return a new persistent action-bar entry
    */
-  public ActionbarEntry(final Key key, final Component valueComponent) {
-    this(key, valueComponent, Duration.ZERO);
+  @Contract(value = "_, _ -> new", pure = true)
+  static ActionbarEntry actionbarEntry(final Key key, final Component component) {
+    return actionbarEntry(key, component, Duration.ZERO);
   }
 
   /**
-   * Creates a time-limited entry that expires after {@code duration} has elapsed.
+   * Returns the lifetime of this entry.
    *
-   * @param key the unique identifier for this entry
-   * @param valueComponent the text component to display
-   * @param duration the lifetime of this entry; use {@link Duration#ZERO} for no expiry
+   * @return the lifetime, where {@link Duration#ZERO} indicates no expiry
    */
-  public ActionbarEntry(final Key key, final Component valueComponent, final Duration duration) {
-    this.key = requireNonNull(key, "Key cannot be null");
-
-    this.valueComponent = requireNonNull(valueComponent, "Value component cannot be null");
-
-    this.duration = requireNonNull(duration, "Duration cannot be null");
-
-    this.creationTime = now();
-  }
+  Duration duration();
 
   /**
-   * Returns {@code true} if this entry has a non-zero duration and its lifetime has elapsed.
+   * Returns the instant at which this entry was created.
    *
-   * @return {@code true} if expired, {@code false} if still valid or persistent
+   * @return the creation instant
    */
-  public boolean expired() {
-    return !this.duration.isZero() && now().isAfter(this.creationTime.plus(this.duration));
-  }
+  Instant creationTime();
+
+  /**
+   * Returns whether this entry's lifetime has elapsed.
+   *
+   * @return {@code true} if expired, otherwise {@code false}
+   */
+  boolean expired();
 }
