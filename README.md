@@ -98,6 +98,8 @@ For example, with the custom configuration shown above:
 | Method                                                                                      | Description                                                       |
 |---------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
 | `ActionbarUpdateConfiguration.actionbarUpdateConfiguration(long initialDelay, long period)` | Creates the update configuration with an initial delay and period |
+| `initialDelay()`                                                                            | Returns the configuration's stored initial delay                  |
+| `period()`                                                                                  | Returns the configuration's stored period                         |
 
 ### `ActionbarService`
 
