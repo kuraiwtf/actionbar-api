@@ -93,14 +93,22 @@ For example, with the custom configuration shown above:
 
 ## API
 
+### `ActionbarUpdateConfiguration`
+
+| Method                                                                                      | Description                                                       |
+|---------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
+| `ActionbarUpdateConfiguration.actionbarUpdateConfiguration(long initialDelay, long period)` | Creates the update configuration with an initial delay and period |
+| `initialDelay()`                                                                            | Returns the configuration's stored initial delay                  |
+| `period()`                                                                                  | Returns the configuration's stored period                         |
+
 ### `ActionbarService`
 
-| Method                                                                                     | Description                                                                      |
-| ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
-| `ActionbarService.actionbarService(Plugin, Function<Player, Audience>)`                    | Creates the service with `JoinConfiguration.commas(true)` and starts the update task |
-| `ActionbarService.actionbarService(Plugin, Function<Player, Audience>, JoinConfiguration)` | Creates the service with a custom join configuration and starts the update task  |
-| `actionbar(UUID)`                                                                          | Returns (or lazily creates) the `Actionbar` for the given holder UUID            |
-| `joinConfiguration()`                                                                      | Returns the `JoinConfiguration` used when rendering entries                      |
+| Method                                                                                                                   | Description                                                                      |
+|--------------------------------------------------------------------------------------------------------------------------| -------------------------------------------------------------------------------- |
+| `ActionbarService.actionbarService(Plugin, Function<Player, Audience>)`                                                  | Creates the service with `JoinConfiguration.commas(true)` and starts the update task |
+| `ActionbarService.actionbarService(Plugin, Function<Player, Audience>, JoinConfiguration, ActionbarUpdateConfiguration)` | Creates the service with a custom join configuration and starts the update task  |
+| `actionbar(UUID)`                                                                                                        | Returns (or lazily creates) the `Actionbar` for the given holder UUID            |
+| `joinConfiguration()`                                                                                                    | Returns the `JoinConfiguration` used when rendering entries                      |
 
 ### `Actionbar`
 

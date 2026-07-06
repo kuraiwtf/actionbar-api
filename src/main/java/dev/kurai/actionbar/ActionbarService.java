@@ -1,5 +1,6 @@
 package dev.kurai.actionbar;
 
+import dev.kurai.actionbar.update.configuration.ActionbarUpdateConfiguration;
 import java.util.UUID;
 import java.util.function.Function;
 import net.kyori.adventure.audience.Audience;
@@ -42,7 +43,11 @@ public sealed interface ActionbarService permits ActionbarServiceImpl {
   @Contract("_, _ -> new")
   static ActionbarService actionbarService(
       final Plugin plugin, final Function<Player, Audience> audienceProvider) {
-    return actionbarService(plugin, audienceProvider, JoinConfiguration.commas(true));
+    return actionbarService(
+        plugin,
+        audienceProvider,
+        JoinConfiguration.commas(true),
+        ActionbarUpdateConfiguration.EVERY_TICK);
   }
 
   /**
@@ -53,14 +58,17 @@ public sealed interface ActionbarService permits ActionbarServiceImpl {
    * @param audienceProvider a function that maps a {@link Player} to the {@link Audience} that
    *     receives action-bar messages
    * @param joinConfiguration the join configuration used to compose action-bar entries
+   * @param actionbarUpdateConfiguration the configuration for the scheduled task
    * @return a new running {@code ActionbarService}; never {@code null}
    */
-  @Contract("_, _, _ -> new")
+  @Contract("_, _, _, _ -> new")
   static ActionbarService actionbarService(
       final Plugin plugin,
       final Function<Player, Audience> audienceProvider,
-      final JoinConfiguration joinConfiguration) {
-    return new ActionbarServiceImpl(plugin, audienceProvider, joinConfiguration);
+      final JoinConfiguration joinConfiguration,
+      final ActionbarUpdateConfiguration actionbarUpdateConfiguration) {
+    return new ActionbarServiceImpl(
+        plugin, audienceProvider, joinConfiguration, actionbarUpdateConfiguration);
   }
 
   /**

@@ -35,12 +35,12 @@ final class ActionbarEntryImpl implements ActionbarEntry {
     this.component = requireNonNull(component, "Component cannot be null");
 
     this.duration = requireNonNull(duration, "Duration cannot be null");
-    if (duration.isNegative()) {
+    if (this.duration.isNegative()) {
       throw new IllegalArgumentException("Duration cannot be negative");
     }
 
     this.creationTime = now();
-    this.expirationTime = duration.isZero() ? null : this.creationTime.plus(duration);
+    this.expirationTime = this.duration.isZero() ? null : this.creationTime.plus(this.duration);
   }
 
   /** {@inheritDoc} */

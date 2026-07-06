@@ -1,9 +1,7 @@
-package dev.kurai.actionbar.task;
+package dev.kurai.actionbar;
 
 import static java.util.Objects.requireNonNull;
 
-import dev.kurai.actionbar.Actionbar;
-import dev.kurai.actionbar.ActionbarService;
 import dev.kurai.actionbar.entry.ActionbarEntry;
 import java.util.function.Function;
 import net.kyori.adventure.audience.Audience;
@@ -11,6 +9,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Runnable task that runs every tick to refresh action bars for online players with active entries.
@@ -25,12 +24,13 @@ import org.bukkit.entity.Player;
  *
  * <p>Players with no entries are skipped — no packet is sent.
  */
-public final class ActionbarUpdaterTask implements Runnable {
+@ApiStatus.Internal
+final class ActionbarUpdateRunnable implements Runnable {
 
   private final ActionbarService actionbarService;
   private final Function<Player, Audience> audienceProvider;
 
-  public ActionbarUpdaterTask(
+  ActionbarUpdateRunnable(
       final ActionbarService actionbarService, final Function<Player, Audience> audienceProvider) {
     this.actionbarService = requireNonNull(actionbarService, "Actionbar service cannot be null");
     this.audienceProvider = requireNonNull(audienceProvider, "Audience provider cannot be null");
